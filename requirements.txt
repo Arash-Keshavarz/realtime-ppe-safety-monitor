@@ -1,0 +1,19 @@
+numpy
+matplotlib
+opencv-python
+torch
+torchvision
+pandas
+seaborn
+ultralytics
+dvc
+mlflow
+notebook
+python-box
+pyYAML
+tqdm
+ensure
+joblib
+types-pyYAML
+
+-e .
