@@ -1,1 +1,8 @@
 artifacts_root: artifacts
+
+
+data_ingestion:
+  root_dir: artifacts/data_ingestion
+  source_URL: ketakichalke/ppe-kit-detection-construction-site-workers #from kaggle
+  local_data_file: artifacts/data_ingestion/PPE_dataset.zip
+  unzipped_data_dir: artifacts/data_ingestion/unzipped_PPE_data
