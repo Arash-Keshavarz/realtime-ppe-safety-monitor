@@ -15,5 +15,5 @@ tqdm
 ensure
 joblib
 types-pyYAML
-
+kagglehub
 -e .
