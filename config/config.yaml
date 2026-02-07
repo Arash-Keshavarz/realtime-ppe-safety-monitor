@@ -1,8 +1,35 @@
 artifacts_root: artifacts
 
-
+# 1. Data Ingestion
+# Responsible for downloading and unzipping data
 data_ingestion:
   root_dir: artifacts/data_ingestion
-  source_URL: https://github.com/ultralytics/assets/releases/download/v0.0.0/construction-ppe.zip #from ultralytics
+  source_URL: https://github.com/ultralytics/assets/releases/download/v0.0.0/construction-ppe.zip
   local_data_file: artifacts/data_ingestion/PPE_dataset.zip
   unzipped_data_dir: artifacts/data_ingestion/unzipped_PPE_data
+
+
+# 2. Prepare Base Model
+# Responsible for downloading the foundation model (e.g., YOLOv8n)
+prepare_base_model:
+  root_dir: artifacts/prepare_base_model
+  base_model_path: artifacts/prepare_base_model/yolov26n.pt
+  updated_base_model_path: artifacts/prepare_base_model/yolov26n_custom.pt
+
+
+# 3. Fine Tuning (Training)
+# Responsible for taking the base model and training it on custom data
+fine_tuning:
+  root_dir: artifacts/fine_tuning
+  model_path: artifacts/prepare_base_model/yolov26n.pt 
+  data_yaml_file: artifacts/data_ingestion/unzipped_PPE_data/data.yaml
+  trained_model_path: artifacts/fine_tuning/best.pt
+
+
+# 4. Model Evaluation
+# Responsible for testing the trained model on validation data
+model_evaluation:
+  root_dir: artifacts/model_evaluation
+  model_path: artifacts/fine_tuning/best.pt
+  data_yaml_file: artifacts/data_ingestion/unzipped_PPE_data/data.yaml
+  metric_file_name: artifacts/model_evaluation/metrics.json

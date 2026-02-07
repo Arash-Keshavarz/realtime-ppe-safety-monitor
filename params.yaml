@@ -1,4 +1,27 @@
-AUGMENTATION : True
-EPOCHS : 20
-BATCH_SIZE : 16
-LEARNING_RATE : 0.001
+# Training Hyperparameters
+training:
+  weights: yolo26n.pt
+  epochs: 80
+  batch_size: 16
+  learning_rate: 0.001
+  optimizer: auto
+  seed: 42
+  img_size: 640      
+  augmentation: true
+  patience: 25         
+
+# Data Configuration
+data:
+  num_classes: 11
+  classes:
+    - helmet
+    - gloves
+    - vest
+    - boots
+    - goggles
+    - none
+    - Person
+    - no_helmet
+    - no_goggle
+    - no_gloves
+    - no_boots
