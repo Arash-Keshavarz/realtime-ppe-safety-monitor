@@ -13,7 +13,6 @@ class PrepareBaseModel:
         try:
             logger.info("Downloading/Loading base model...")
             
-            print(f"Attempting to load model from: {self.config.params_weights}")
             model = YOLO(self.config.params_weights) 
             
             downloaded_weight_path = Path(self.config.params_weights) 
@@ -22,8 +21,15 @@ class PrepareBaseModel:
             if not destination_path.exists():
                 logger.info(f"Moving base model to {destination_path}")
                 shutil.copy(downloaded_weight_path, destination_path)
+                
+                if os.path.exists(downloaded_weight_path):
+                    os.remove(downloaded_weight_path)
+                    logger.info(f"Removed temporary downloaded model at {downloaded_weight_path}")
             else:
                 logger.info(f"Base model already exists at {destination_path}")
+                if os.path.exists(downloaded_weight_path):
+                    os.remove(downloaded_weight_path)
+                    logger.info(f"Removed temporary downloaded model at {downloaded_weight_path}")
 
         except Exception as e:
             logger.error(f"Error in get_base_model: {e}")

@@ -1,6 +1,6 @@
 from PPE_DETECTION.constants import *
 from PPE_DETECTION.utils.common import read_yaml, create_directories
-from PPE_DETECTION.entity.config_entity import DataIngestionConfig, PrepareBaseModelConfig
+from PPE_DETECTION.entity.config_entity import DataIngestionConfig, PrepareBaseModelConfig, TrainingConfig
 from pathlib import Path
 import os
 
@@ -51,3 +51,23 @@ class ConfigurationManager:
         )
         
         return prepare_base_model_config
+    
+    def get_training_config(self) -> TrainingConfig:
+        training = self.config.fine_tuning
+        prepare_base_model = self.config.prepare_base_model
+        params = self.params.training
+        
+        create_directories([training.root_dir])
+        
+        training_config = TrainingConfig(
+            root_dir=Path(training.root_dir),
+            trained_model_path=Path(training.trained_model_path),
+            updated_base_model_path=Path(prepare_base_model.base_model_path),  # Use the base model path from prepare_base_model config
+            training_data=Path(training.data_yaml_file),
+            params_epochs=params.epochs,
+            params_batch_size=params.batch_size,
+            params_is_augmentation=params.augmentation,
+            params_image_size=params.img_size
+        )
+        
+        return training_config

@@ -1,7 +1,7 @@
 # Training Hyperparameters
 training:
   weights: yolo26n.pt
-  epochs: 80
+  epochs: 4
   batch_size: 16
   learning_rate: 0.001
   optimizer: auto
