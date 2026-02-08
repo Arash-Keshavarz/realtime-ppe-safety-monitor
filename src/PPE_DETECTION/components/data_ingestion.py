@@ -1,6 +1,7 @@
 import os
 import requests
 import zipfile
+import gdown
 from PPE_DETECTION.entity.config_entity import DataIngestionConfig
 from PPE_DETECTION import logger
 
@@ -10,6 +11,10 @@ class DataIngestion:
         self.config = config
 
     def download_data(self):
+        """
+
+        Download data from S3, Github, or Google Drive automatically.
+        """
         try:
             root_dir = self.config.root_dir
             dataset_url = self.config.source_URL
@@ -21,23 +26,41 @@ class DataIngestion:
             # Create directories
             os.makedirs(root_dir, exist_ok=True)
             os.makedirs(unzipped_data_dir, exist_ok=True)
+            
+            # Strategy 1 : Google Drive
+            if "drive.google.com" in dataset_url:
+                logger.info("Detected Google Drive URL. Using gdown to download.")
+                gdown.download(dataset_url, str(zip_download_path), quiet=False, fuzzy=True)
+            
+            # Strategy 2 : Standard Direct Link (Github, S3, etc.)
+            else:
+                logger.info("Detected standard URL. Using requests to download.")
+                response = requests.get(dataset_url, stream=True)
+                response.raise_for_status()
 
-            # Download ZIP
-            response = requests.get(dataset_url, stream=True)
-            response.raise_for_status()
-
-            with open(zip_download_path, "wb") as f:
-                for chunk in response.iter_content(chunk_size=8192):
-                    f.write(chunk)
+                with open(zip_download_path, "wb") as f:
+                    for chunk in response.iter_content(chunk_size=8192):
+                        f.write(chunk)
 
             logger.info(f"Dataset downloaded to {zip_download_path}")
 
-            # Unzip
-            with zipfile.ZipFile(zip_download_path, "r") as zip_ref:
-                zip_ref.extractall(unzipped_data_dir)
-
-            logger.info(f"Dataset extracted to {unzipped_data_dir}")
+            # Unzip the dataset
+            self.extract_zip_file(zip_download_path, unzipped_data_dir)
 
         except Exception as e:
             logger.error(f"Error occurred while downloading dataset: {e}")
             raise e
+    
+    def extract_zip_file(self, zip_file_path: str, extract_to: str):
+        
+        """Extract the downloaded zip file to the specified directory.
+        """
+        try:
+            with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+                zip_ref.extractall(extract_to)
+            logger.info(f"Dataset extracted to {extract_to}")
+            
+        except zipfile.BadZipFile:
+                    logger.error(f"The downloaded file at {zip_file_path} is not a valid zip file. "
+                                "Check if the URL is correct or if access is denied.")
+                    raise

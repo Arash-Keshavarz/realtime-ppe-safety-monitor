@@ -12,16 +12,17 @@ training:
 
 # Data Configuration
 data:
-  num_classes: 11
+
+  num_classes: 10
   classes:
-    - helmet
-    - gloves
-    - vest
-    - boots
-    - goggles
-    - none
+    - Hardhat
+    - Mask
+    - NO-Hardhat
+    - NO-Mask
+    - NO-Safety Vest
     - Person
-    - no_helmet
-    - no_goggle
-    - no_gloves
-    - no_boots
+    - Safety Cone
+    - Safety Vest
+    - machinery
+    - vehicle
+

@@ -15,5 +15,6 @@ tqdm
 ensure
 joblib
 types-pyYAML
-kagglehub
+gdown
+requests
 -e .

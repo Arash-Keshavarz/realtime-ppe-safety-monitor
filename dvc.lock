@@ -1,0 +1,39 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python src/PPE_DETECTION/pipeline/stage_01_data_ingestion.py
+    deps:
+    - path: config/config.yaml
+      hash: md5
+      md5: 4f9e2d472c3b45408401eb24f0f1ef52
+      size: 1301
+    - path: src/PPE_DETECTION/pipeline/stage_01_data_ingestion.py
+      hash: md5
+      md5: 3528509d1aefcf419a823edfa414ed1a
+      size: 872
+    outs:
+    - path: artifacts/data_ingestion/unzipped_PPE_data
+      hash: md5
+      md5: f4fd9b3ba7985991ad5a65eb6e46fdec.dir
+      size: 157378940
+      nfiles: 11223
+  prepare_base_model:
+    cmd: python src/PPE_DETECTION/pipeline/stage_02_prepare_base_model.py
+    deps:
+    - path: config/config.yaml
+      hash: md5
+      md5: 4f9e2d472c3b45408401eb24f0f1ef52
+      size: 1301
+    - path: src/PPE_DETECTION/pipeline/stage_02_prepare_base_model.py
+      hash: md5
+      md5: 6bbc127e4c978bc3b89f539b6e347bd9
+      size: 962
+    params:
+      params.yaml:
+        training.img_size: 640
+        training.weights: yolo26n.pt
+    outs:
+    - path: artifacts/prepare_base_model/yolo26n.pt
+      hash: md5
+      md5: cf3cca69f04cf639bafdeb2644bd0843
+      size: 5544453

@@ -1,0 +1,34 @@
+stages:
+  data_ingestion:
+    cmd: python src/PPE_DETECTION/pipeline/stage_01_data_ingestion.py
+    deps:
+      - src/PPE_DETECTION/pipeline/stage_01_data_ingestion.py
+      - config/config.yaml
+    outs:
+      - artifacts/data_ingestion/unzipped_PPE_data
+
+  prepare_base_model:
+    cmd: python src/PPE_DETECTION/pipeline/stage_02_prepare_base_model.py
+    deps:
+      - src/PPE_DETECTION/pipeline/stage_02_prepare_base_model.py
+      - config/config.yaml
+    params:
+      - training.weights
+      - training.img_size
+    outs:
+      - artifacts/prepare_base_model/yolo26n.pt
+
+  training:
+    cmd: python src/PPE_DETECTION/pipeline/stage_03_training.py
+    deps:
+      - src/PPE_DETECTION/pipeline/stage_03_training.py
+      - config/config.yaml
+      - artifacts/data_ingestion/unzipped_PPE_data
+      - artifacts/prepare_base_model/yolo26n.pt
+    params:
+      - training.epochs
+      - training.batch_size
+      - training.img_size
+      - training.augmentation
+    outs:
+      - artifacts/fine_tuning/best.pt
